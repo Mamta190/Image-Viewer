@@ -55,7 +55,7 @@ class Login extends Component {
   //Validate login and set access token
   loginClickHandler = () => {
     let username = "upgrad";
-    let password = "upgrad";
+    let password = "upgrad@123";
     let access_token =
       "IGQVJVN1Q5d2hjLWUzU3NRVmQ3bEREUWhVdU0tbkwyRDdfR1N1d0ZAOOW9GYWRGVENLWDM1alljRnFRTFNpNUd4MGNsTUt4ejFQVlZAGLWlDZA204ZAmJhNGFxSWVqX1VHYlUtSVVDN3ozYXlEdlJST3I0elhHOGZAtN0oyNlpr";
     let user_id = "17841443408398723";
