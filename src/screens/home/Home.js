@@ -7,7 +7,6 @@ import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
-import Avatar from "@material-ui/core/Avatar";
 import CardMedia from "@material-ui/core/CardMedia";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -16,8 +15,9 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLable from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
+import Avatar from "@material-ui/core/Avatar";
+import Typography from "@material-ui/core/Typography";
 
 
 const styles = (theme) => ({
@@ -26,12 +26,7 @@ const styles = (theme) => ({
       flexGrow: 1,
       backgroundColor: theme.palette.background.paper,
     },
-    //Grid css
-    grid: {
-      padding: "20px",
-      "margin-left": "10%",
-      "margin-right": "10%",
-    },
+    
     card: {
       maxWidth: "100%",
     },
@@ -40,16 +35,17 @@ const styles = (theme) => ({
       height: 0,
       paddingTop: "56.25%",
     },
-    //Avatar card css
-    avatar: {
-      margin: 10,
-      width: 60,
-      height: 60,
-    },
+   //Grid css
+   grid: {
+    padding: "20px",
+    "margin-left": "10%",
+    "margin-right": "10%",
+  },
     //Title card css
     title: {
       "font-weight": "600",
     },
+    //likeButton
     likeButton: {
       "padding-left": "0px",
     },
@@ -57,6 +53,12 @@ const styles = (theme) => ({
     addCommentBtn: {
       "margin-left": "15px",
     },
+     //Avatar card css
+     avatar: {
+        margin: 10,
+        width: 60,
+        height: 60,
+      },
   
     //Comment box css
     comment: {
@@ -65,6 +67,7 @@ const styles = (theme) => ({
       "align-items": "baseline",
       "justify-content": "center",
     },
+    //Comment User Name
     commentUsername: {
       fontSize: "inherit",
     },
@@ -179,6 +182,23 @@ class Home extends Component {
           comment,
         });
       };
+       //Add Comment Handler
+       addCommentHandler = () => {
+        let count = this.state.commentCount;
+        let comment = {
+          id: count,
+          imageId: this.state.comment.id,
+          username: this.state.username,
+          commentText: this.state.comment.commentText,
+        };
+        count++;
+        let comments = [...this.state.comments, comment];
+        this.setState({
+          comments,
+          commentCount: count,
+          comment: "",
+        });
+      };
 
        //Caption search Handler
        captionSearchHandler = (keyword) => {
@@ -217,25 +237,7 @@ class Home extends Component {
         }
       };
 
-      //Add Comment Handler
-      addCommentHandler = () => {
-        let count = this.state.commentCount;
-        let comment = {
-          id: count,
-          imageId: this.state.comment.id,
-          username: this.state.username,
-          commentText: this.state.comment.commentText,
-        };
-        count++;
-        let comments = [...this.state.comments, comment];
-        this.setState({
-          comments,
-          commentCount: count,
-          comment: "",
-        });
-      };
-    
-         
+     
     render() {
         const { classes } = this.props;
         return (
@@ -246,8 +248,116 @@ class Home extends Component {
           showMyAccount={this.state.isLogin ? true : false}
           captionSearchHandler={this.captionSearchHandler}
         />
-              </div>
-        )
-    }
+          <div className="flex-container">
+          <Grid
+            container
+            spacing={3}
+            wrap="wrap"
+            alignContent="center"
+            className={classes.grid}
+          >
+            {this.state.images.map((image) => (
+              <Grid key={image.id} item xs={12} sm={6} className="grid-item">
+                <Card className={classes.card}>
+                  <CardHeader
+                    classes={{
+                      title: classes.title,
+                    }}
+                    avatar={<Avatar src={profileImage}></Avatar>}
+                    title={this.state.username}
+                    subheader={image.timestamp}
+                    className={classes.cardheader}
+                  ></CardHeader>
+                  <CardMedia
+                    image={image.media_url}
+                    className={classes.media}
+                  ></CardMedia>
+                  <CardContent>
+                    <div className="horizontal-rule"></div>
+
+                    <div className="image-caption">{image.caption[0]}</div>
+                    <div className="image-hashtags">{image.caption[1]}</div>
+                    <IconButton
+                      className={classes.likeButton}
+                      aria-label="like-button"
+                      onClick={() => this.likeBtnHandler(image.id)}
+                    >
+                      {image.isLiked ? (
+                        <FavoriteIcon
+                          fontSize="large"
+                          style={{ color: "red" }}
+                        ></FavoriteIcon>
+                      ) : (
+                        <FavoriteBorderIcon fontSize="large"></FavoriteBorderIcon>
+                      )}
+                    </IconButton>
+
+                    {image.likes === 1 ? (
+                      <span className="like-count">{image.likes} like</span>
+                    ) : (
+                      <span className="like-count">{image.likes} likes</span>
+                    )}
+
+                    {this.state.comments.map((comment) =>
+                      image.id === comment.imageId ? (
+                        <div
+                          className="comment-display"
+                          key={"comment" + comment.id}
+                        >
+                          <Typography
+                            variant="subtitle2"
+                            className={classes.commentUsername}
+                            gutterbottom="true"
+                          >
+                            {comment.username}:
+                          </Typography>
+                          <Typography
+                            variant="body1"
+                            className="comment-text"
+                            gutterbottom="true"
+                          >
+                            {comment.commentText}
+                          </Typography>
+                        </div>
+                      ) : (
+                        ""
+                      )
+                    )}
+
+                    <FormControl className={classes.comment} fullWidth={true}>
+                      <InputLable htmlFor={"Addcomment" + image.id}>
+                        Add a comment
+                      </InputLable>
+                      <Input
+                        id={"Addcomment" + image.id}
+                        className="comment-text"
+                        onChange={(event) =>
+                          this.commentTextChangeHandler(event, image.id)
+                        }
+                        value={
+                          image.id === this.state.comment.id
+                            ? this.state.comment.commentText
+                            : ""
+                        }
+                      ></Input>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.addCommentBtn}
+                        onClick={this.addCommentHandler.bind(this)}
+                      >
+                        Add
+                      </Button>
+                    </FormControl>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+      </div>
+    );
+  }
 }
-export default Home;          
+
+export default withStyles(styles)(Home);

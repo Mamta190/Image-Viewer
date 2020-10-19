@@ -1,0 +1,87 @@
+
+.profile-box {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 200px;
+    background-color: #F8F8FF; /*Adding profile background to make profile_picture visible*/
+   
+}
+
+.profile-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    
+    
+
+}
+
+.profile-photo{
+    flex : 0.3;
+    padding: 10px 10px 10px 80px ;
+  
+}
+
+.profile-details{
+    flex : 0.7;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.post-details{
+    display: flex;
+    flex-direction: row;
+    background-color: #F8F8FF; 
+}
+
+.left-modal{
+    flex : 0.3
+}
+.left-modal img{
+  
+    width: 350px;
+     height: 380px;
+     background-position: 50% 50%;
+     background-repeat: no-repeat;
+     background-size: cover;
+   
+}
+
+
+
+.right-modal{
+    flex:0.7;
+    display : flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.right-modal-header{
+    height: 50px;
+    flex: 0.3;
+}
+
+.right-modal-content{
+    flex: 0.7;
+}
+
+.noLike{
+    background-color: white;
+  }
+
+  .liked{
+    background-color: red;
+  }
+
+  #profilecommentInput{
+    width: 500px;
+    padding-right: 10px;
+  }
+  .profile-comment-section{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
